@@ -1,0 +1,51 @@
+ class ListNode {
+    int val;
+    ListNode next;
+    ListNode(int val) { this.val = val; }
+    static ListNode deserialize(String s) {
+        s = s.trim();
+        if (s.equals("[]")) return null;
+        String[] parts = s.substring(1, s.length() - 1).split(",");
+        ListNode dummy = new ListNode(0);
+        ListNode curr = dummy;
+        for (String part : parts) {
+            curr.next = new ListNode(Integer.parseInt(part.trim()));
+            curr = curr.next;
+        }
+        return dummy.next;
+    }
+    static String serialize(ListNode head) {
+        StringBuilder sb = new StringBuilder("[");
+        while (head != null) {
+            sb.append(head.val);
+            if (head.next != null) sb.append(",");
+            head = head.next;
+        }
+        sb.append("]");
+        return sb.toString();
+    }
+}
+public class Solution {
+    public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
+        ListNode dummy = new ListNode(0), curr = dummy;
+        int carry = 0;
+        while (l1 != null || l2 != null || carry != 0) {
+            int sum = carry;
+            if (l1 != null) { sum += l1.val; l1 = l1.next; }
+            if (l2 != null) { sum += l2.val; l2 = l2.next; }
+            carry = sum / 10;
+            curr.next = new ListNode(sum % 10);
+            curr = curr.next;
+        }
+        return dummy.next;
+    }
+    public static void main(String[] args) {
+        String s1 = "[2,4,3]";
+        String s2 = "[5,6,4]";
+        ListNode l1 = ListNode.deserialize(s1);
+        ListNode l2 = ListNode.deserialize(s2);
+        Solution sol = new Solution();
+        ListNode result = sol.addTwoNumbers(l1, l2);
+        System.out.println(ListNode.serialize(result)); 
+    }
+}
